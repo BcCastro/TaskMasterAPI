@@ -5,14 +5,14 @@ builder.Services.AddSwaggerGen(); // Esto activa la página de prueba Swagger
 
 var app = builder.Build();
 
-// Configura la página de prueba (Swagger)
-if (app.Environment.IsDevelopment())
+// BORRA EL "if" anterior y pega esto:
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskMaster API V1");
+    c.RoutePrefix = string.Empty; // Esto hace que la API cargue directo en el link principal
+});
 
 app.UseHttpsRedirection();
-app.MapControllers(); // ¡Importante! Esto conecta tus archivos de la carpeta Controllers
-
-app.Run(); // Esto enciende el servidor
+app.MapControllers();
+app.Run();
