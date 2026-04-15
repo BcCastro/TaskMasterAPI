@@ -7,8 +7,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Conexión a SQLite
-builder.Services.AddSqlite<AppDbContext>("Data Source=TaskMaster.db");
+var path = Path.Combine(Path.GetTempPath(), "TaskMaster.db");
+builder.Services.AddSqlite<AppDbContext>($"Data Source={path}");
+
 
 var app = builder.Build();
 
