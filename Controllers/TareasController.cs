@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TaskMasterAPI.Models; // <-- Esta es la dirección que faltaba
-
+using TaskMasterAPI.Models; 
 namespace TaskMasterAPI.Controllers;
 
 [ApiController]
@@ -30,15 +29,5 @@ public class TareasController : ControllerBase
         return Ok(new { mensaje = "¡Guardado en base de datos!", tarea = nuevaTarea });
     }
 
-    [HttpDelete("{id}")]
-public async Task<ActionResult> EliminarTarea(int id)
-{
-    var tarea = await _context.Tareas.FindAsync(id);
-    if (tarea == null) return NotFound();
-
-    _context.Tareas.Remove(tarea);
-    await _context.SaveChangesAsync();
-    return Ok(new { mensaje = $"Tarea {id} eliminada de la base de datos" });
-}
-
+    
 }
