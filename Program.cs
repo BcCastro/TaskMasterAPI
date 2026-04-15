@@ -7,10 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// --- CAMBIO CLAVE PARA PERMISOS EN AZURE ---
-var path = Path.Combine(Path.GetTempPath(), "TaskMaster.db");
-builder.Services.AddSqlite<AppDbContext>($"Data Source={path}");
-// -------------------------------------------
+builder.Services.AddSqlite<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 var app = builder.Build();
 
