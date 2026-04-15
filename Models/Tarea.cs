@@ -1,4 +1,4 @@
-namespace TaskMasterAPI;
+namespace TaskMasterAPI.Models;
 
 public class Tarea
 {

@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TaskMasterAPI.Models; // <-- Esta es la dirección que faltaba
 
 namespace TaskMasterAPI.Controllers;
 
@@ -6,19 +8,37 @@ namespace TaskMasterAPI.Controllers;
 [Route("api/[controller]")]
 public class TareasController : ControllerBase
 {
-    // Lista estática que se mantiene mientras el programa corre
-    private static List<Tarea> tareas = new List<Tarea>();
+    private readonly AppDbContext _context;
+
+    // Conectamos el controlador con la Base de Datos
+    public TareasController(AppDbContext context)
+    {
+        _context = context;
+    }
 
     [HttpGet]
-    public ActionResult<List<Tarea>> ObtenerTodas()
+    public async Task<ActionResult<List<Tarea>>> ObtenerTodas()
     {
-        return Ok(tareas);
+        return await _context.Tareas.ToListAsync();
     }
 
     [HttpPost]
-    public ActionResult CrearTarea(Tarea nuevaTarea)
+    public async Task<ActionResult> CrearTarea(Tarea nuevaTarea)
     {
-        tareas.Add(nuevaTarea);
-        return Ok(new { mensaje = "¡Tarea guardada con éxito!", tarea = nuevaTarea });
+        _context.Tareas.Add(nuevaTarea);
+        await _context.SaveChangesAsync();
+        return Ok(new { mensaje = "¡Guardado en base de datos!", tarea = nuevaTarea });
     }
+
+    [HttpDelete("{id}")]
+public async Task<ActionResult> EliminarTarea(int id)
+{
+    var tarea = await _context.Tareas.FindAsync(id);
+    if (tarea == null) return NotFound();
+
+    _context.Tareas.Remove(tarea);
+    await _context.SaveChangesAsync();
+    return Ok(new { mensaje = $"Tarea {id} eliminada de la base de datos" });
+}
+
 }
