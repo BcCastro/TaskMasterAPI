@@ -6,16 +6,19 @@ namespace TaskMasterAPI.Controllers;
 [Route("api/[controller]")]
 public class TareasController : ControllerBase
 {
-    // Datos de prueba para ver que funciona
-    private static List<Tarea> tareas = new List<Tarea>
-    {
-        new Tarea { Id = 1, Titulo = "Mi primer proyecto Pro", EstaCompletada = false },
-        new Tarea { Id = 2, Titulo = "Desplegar en Azure", EstaCompletada = false }
-    };
+    // Lista estática que se mantiene mientras el programa corre
+    private static List<Tarea> tareas = new List<Tarea>();
 
     [HttpGet]
-    public ActionResult<List<Tarea>> Get()
+    public ActionResult<List<Tarea>> ObtenerTodas()
     {
         return Ok(tareas);
+    }
+
+    [HttpPost]
+    public ActionResult CrearTarea(Tarea nuevaTarea)
+    {
+        tareas.Add(nuevaTarea);
+        return Ok(new { mensaje = "¡Tarea guardada con éxito!", tarea = nuevaTarea });
     }
 }
