@@ -14,8 +14,9 @@ var app = builder.Build();
 // --- ESTO ASEGURA QUE LA BASE DE DATOS SE CREE AL ARRANCAR ---
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    context.Database.EnsureCreated(); 
 }
 
 app.UseSwagger();
